@@ -24,6 +24,11 @@ module.exports = {
                         options: { minimize: true }
                     }
                 ]
+            },
+            {
+                test: /\.css$/,
+                exclude: /node_modules/,
+                use: ["style-loader", "css-loader"]
             }
         ]
     },
@@ -33,7 +38,7 @@ module.exports = {
             filename: "./index.html"
         }),
         new webpack.NamedModulesPlugin(), // 新增
-        new webpack.HotModuleReplacementPlugin() //新增
+        new webpack.HotModuleReplacementPlugin(), //新增
     ],
     devServer: {
         contentBase: require('path').join(__dirname, "dist"),
