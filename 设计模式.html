@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script type="text/javascript">
+      // 发布-订阅模式(观察者模式)
+      function Publisher(){}
+
+      Publisher.prototype.on = function(eventName, callback){
+        if(!this.handles){
+          this.handles = {}
+        }
+        if(!this.handles[eventName]) {
+          this.handles[eventName] = []
+        }
+        this.handles[eventName].push(callback)
+      }
+
+      Publisher.prototype.emit = function(eventName){
+        if(JSON.stringify(this.handles) == '{}'){
+          return
+        }
+        for(var key in this.handles){
+          if(key !== eventName){
+            continue
+          }         
+          for(var i=0;i<this.handles[key].length;i++){
+            if(arguments[1]){
+              //console.log(this.handles[key].length,1)
+              this.handles[key][i](arguments[1])
+            } else {
+              //console.log(this.handles[key].length,2)
+              this.handles[key][i]()
+            }            
+          }
+        }
+      }
+
+      var publish = new Publisher()
+
+      publish.on('test',function(){
+        console.log(1)
+      })
+
+      publish.on('cli',function(result){
+        console.log(result)
+      })
+
+      publish.emit('test')
+
+      publish.emit('cli','wjw')
+
+      //装饰者模式
+      function Monkey(){
+
+      }
+      Monkey.prototype.attack = function() {
+        console.log('挠死你')
+      }
+      Monkey.prototype.sayName = function() {
+        console.log('I am a monkey')
+      }
+
+      function Decorator(Monkey) {
+        this.Monkey = monkey
+      }
+
+      Decorator.prototype.attack = function() {
+        this.Monkey.attack()
+      }
+
+      function BigMonkey(Decorator) {
+        this.Decorator = Decorator
+      }
+      BigMonkey.prototype.attack = function() {
+        this.Decorator.attack()
+        console.log('我还要踹你')
+      }
+
+      var monkey = new Monkey()
+      var decorator = new Decorator(monkey)
+      var bigMonkey = new BigMonkey(decorator)
+      bigMonkey.attack()
+  </script>
+</body>
+</html>
